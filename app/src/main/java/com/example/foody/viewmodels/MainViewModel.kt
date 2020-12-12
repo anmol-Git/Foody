@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.foody.data.Repository
@@ -90,6 +91,7 @@ class MainViewModel @ViewModelInject constructor(private val repository: Reposit
                 }
             }catch ( e: Exception){
                 recipeResponse.value =NetworkResult.Error("Recipe not found.")
+                e.printStackTrace()
             }
         }else{
             recipeResponse.value=NetworkResult.Error("No Internet Connection")
@@ -102,7 +104,7 @@ class MainViewModel @ViewModelInject constructor(private val repository: Reposit
                 val response = repository.remote.searchRecipe(searchQueries)
                 searchResponse.value = handleFoodRecipeResponse(response)
             }catch ( e: Exception){
-                searchResponse.value =NetworkResult.Error("Recipe not found.")
+                searchResponse.value = NetworkResult.Error("Recipe not found error.")
             }
         }else{
             searchResponse.value=NetworkResult.Error("No Internet Connection")
@@ -121,7 +123,9 @@ class MainViewModel @ViewModelInject constructor(private val repository: Reposit
                     offlineCacheFoodJoke(foodJoke)
                 }
             }catch ( e: Exception){
+                Log.d("in food joke now", "error")
                 foodJokeResponse.value =NetworkResult.Error("Joke not found.")
+                e.printStackTrace()
             }
         }else{
             foodJokeResponse.value=NetworkResult.Error("No Internet Connection")
