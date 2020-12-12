@@ -1,6 +1,7 @@
 package com.example.foody.viewmodels
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
@@ -61,6 +62,7 @@ class RecipesViewModel @ViewModelInject constructor(application: Application, pr
              }
          }
 
+         Log.d("in query ", "meal type $mealType and diet type $dietType")
         queries[QUERY_NUMBER]= DEFAULT_RECIPE_NUMBER
         queries[QUERY_API_KEY]= API_KEY
         queries[QUERY_TYPE]= mealType
@@ -70,13 +72,13 @@ class RecipesViewModel @ViewModelInject constructor(application: Application, pr
         return queries
     }
 
-    fun applySearchQuery(searchQuery :String) :HashMap<String, String>{
-        val queries :HashMap<String, String> =HashMap()
+    fun applySearchQuery(searchQuery: String): HashMap<String, String> {
+        val queries: HashMap<String, String> = HashMap()
         queries[QUERY_SEARCH] = searchQuery
         queries[QUERY_NUMBER] = DEFAULT_RECIPE_NUMBER
-        queries[QUERY_API_KEY]= API_KEY
-        queries[QUERY_ADD_RECIPE_INFORMATION]="true"
-        queries[QUERY_FILL_INGREDIENT]="true"
+        queries[QUERY_API_KEY] = API_KEY
+        queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
+        queries[QUERY_FILL_INGREDIENT] = "true"
 
         return queries
     }

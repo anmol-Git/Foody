@@ -2,8 +2,8 @@ package com.example.foody.util
 
 class Constant {
     companion object{
-        const val API_KEY="Generate your own ;p "
-        const val BASE_URL="https://api.spoonacular.com"
+        const val API_KEY = "b7da859f43be43d69ac8556ca8825df1"
+        const val BASE_URL = "https://api.spoonacular.com"
         const val BASE_IMAGE_URL = "https://spoonacular.com/cdn/ingredients_100x100/"
 
         //API Query key
@@ -22,8 +22,8 @@ class Constant {
         const val FOOD_JOKE_TABLE = "food_joke_table"
 
         //Bottom Sheet and Preferences
-        const val DEFAULT_RECIPE_NUMBER="50"
-        const val DEFAULT_MEAL_TYPE="main course"
+        const val DEFAULT_RECIPE_NUMBER = "90"
+        const val DEFAULT_MEAL_TYPE = "main course"
         const val DEFAULT_DIET_TYPE="gluten free"
         const val  MEAL_TYPE="mealType"
         const val  DIET_TYPE="dietType"
