@@ -10,7 +10,7 @@
         />
 
     <item android:id="@+id/foodJokeFragment"
-        android:title="Joke"
+        android:title="@string/joke"
         android:icon="@drawable/ic_food_joke"
         />
 </menu>

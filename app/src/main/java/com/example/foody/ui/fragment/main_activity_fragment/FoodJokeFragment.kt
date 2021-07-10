@@ -28,16 +28,16 @@ class FoodJokeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        _binding = FragmentFoodJokeBinding.inflate(inflater,container,false)
-        binding.lifecycleOwner=viewLifecycleOwner
-        binding.mainViewModel=mainViewModel
+        _binding = FragmentFoodJokeBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.mainViewModel = mainViewModel
         setHasOptionsMenu(true)
 
         mainViewModel.getFoodJoke(API_KEY)
-        mainViewModel.foodJokeResponse.observe(viewLifecycleOwner, {response ->
-            when(response){
+        mainViewModel.foodJokeResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
                 is NetworkResult.Success -> {
                     binding.foodJokeTextView.text =response.data?.text
                     if (response.data !=null){

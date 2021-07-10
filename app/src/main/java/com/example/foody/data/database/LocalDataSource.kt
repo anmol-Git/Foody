@@ -1,6 +1,5 @@
-package com.example.foody.data
+package com.example.foody.data.database
 
-import com.example.foody.data.database.RecipeDao
 import com.example.foody.data.database.entities.FavouriteEntity
 import com.example.foody.data.database.entities.FoodJokeEntity
 import com.example.foody.data.database.entities.RecipeEntity

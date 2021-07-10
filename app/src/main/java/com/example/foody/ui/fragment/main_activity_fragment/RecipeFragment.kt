@@ -16,7 +16,7 @@ import com.example.foody.R
 import com.example.foody.adapters.RecipesAdapter
 import com.example.foody.databinding.FragmentRecipeBinding
 import com.example.foody.util.NetworkResult
-import com.example.foody.util.NetworkaListener
+import com.example.foody.util.NetworkListener
 import com.example.foody.util.observeOnce
 import com.example.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,8 +27,8 @@ import kotlinx.coroutines.launch
 class RecipeFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val args by navArgs<RecipeFragmentArgs>()
-    private  lateinit var networkaListener: NetworkaListener
-    private var _binding :FragmentRecipeBinding?=null
+    private lateinit var networkListener: NetworkListener
+    private var _binding: FragmentRecipeBinding? = null
     private val binding get() =_binding!!
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipeViewModel: RecipesViewModel
@@ -45,11 +45,11 @@ class RecipeFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-         _binding= FragmentRecipeBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner=this
-        binding.mainViewModel=mainViewModel
+        _binding = FragmentRecipeBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mainViewModel = mainViewModel
 
         setHasOptionsMenu(true)
 
@@ -63,9 +63,9 @@ class RecipeFragment : Fragment(), SearchView.OnQueryTextListener {
 
 
        lifecycleScope.launchWhenStarted {
-           networkaListener = NetworkaListener()
-           networkaListener.checkNetworkAvailability(requireContext()).collect{status ->
-               recipeViewModel.netwokStatus=status
+           networkListener = NetworkListener()
+           networkListener.checkNetworkAvailability(requireContext()).collect { status ->
+               recipeViewModel.netwokStatus = status
                recipeViewModel.showNetworkStatus()
                readDatabase()
            }
@@ -129,6 +129,7 @@ class RecipeFragment : Fragment(), SearchView.OnQueryTextListener {
             when(response){
                 is NetworkResult.Success -> {hideShimmerEffect()
                     response.data?.let { mAdapter.setData(it) }
+                    recipeViewModel.saveMealAndDietType()
                 }
                 is NetworkResult.Error -> {hideShimmerEffect()
                     loadDatabasefromCache()
@@ -173,17 +174,19 @@ class RecipeFragment : Fragment(), SearchView.OnQueryTextListener {
       })
     }
     }
-    private fun showShimmerEffect(){
-        binding.shimmerRecyclerView.showShimmer()
+
+    private fun showShimmerEffect() {
+        binding.shimmerFrameLayout.startShimmer()
+        binding.shimmerRecyclerView.visibility = View.GONE
     }
 
-    private fun hideShimmerEffect(){
-        binding.shimmerRecyclerView.hideShimmer()
+    private fun hideShimmerEffect() {
+        binding.shimmerFrameLayout.hideShimmer()
+        binding.shimmerRecyclerView.visibility = View.VISIBLE
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
-
 }

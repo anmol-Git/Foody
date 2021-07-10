@@ -41,4 +41,9 @@
     <string name="save_to_fav">Save to Fav</string>
     <string name="no_favorite_recipes">No Favorite Recipes</string>
     <string name="delete_favorite_menu">Delete Favorite Menu</string>
+    <string name="joke">Joke</string>
+    <string name="consistency">Consistency</string>
+    <string name="original">Original</string>
+    <string name="grams">Grams</string>
+    <string name="name">Name</string>
 </resources>
