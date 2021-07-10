@@ -2,11 +2,8 @@ package com.example.foody.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.preferencesKey
-import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.foody.util.Constant.Companion.DEFAULT_DIET_TYPE
 import com.example.foody.util.Constant.Companion.DEFAULT_MEAL_TYPE
 import com.example.foody.util.Constant.Companion.DIET_TYPE
@@ -16,7 +13,7 @@ import com.example.foody.util.Constant.Companion.MEAL_TYPE_ID
 import com.example.foody.util.Constant.Companion.PREFRENCES_BACK_ONLINE
 import com.example.foody.util.Constant.Companion.PREFRENCES_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -24,22 +21,21 @@ import java.io.IOException
 import javax.inject.Inject
 
 
+private val Context.dataStore by preferencesDataStore(PREFRENCES_NAME)
 //It uses datastore to save some prefrences in key value pairs
-@ActivityRetainedScoped
+@ViewModelScoped
 class DataStoreRepository @Inject constructor(@ApplicationContext private val context: Context) {
 
     private object PrefrenceKeys {
-        val selectedMealType = preferencesKey<String>(MEAL_TYPE)
-        val selectedMealTypeId = preferencesKey<Int>(MEAL_TYPE_ID)
-        val selectedDietType = preferencesKey<String>(DIET_TYPE)
-        val selectedDietTypeId = preferencesKey<Int>(DIET_TYPE_ID)
-        val backOnline = preferencesKey<Boolean>(PREFRENCES_BACK_ONLINE)
+        val selectedMealType = stringPreferencesKey(MEAL_TYPE)
+        val selectedMealTypeId = intPreferencesKey(MEAL_TYPE_ID)
+        val selectedDietType = stringPreferencesKey(DIET_TYPE)
+        val selectedDietTypeId = intPreferencesKey(DIET_TYPE_ID)
+        val backOnline = booleanPreferencesKey(PREFRENCES_BACK_ONLINE)
     }
 
     //initializing data store
-    private val dataStore :DataStore<Preferences> = context.createDataStore(
-        name = PREFRENCES_NAME
-    )
+    private val dataStore: DataStore<Preferences> = context.dataStore
 
 
    suspend fun saveMealAndDietType(mealType :String,mealId :Int, dietType : String, dietId : Int){
@@ -60,11 +56,11 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         }
     }
 
-        val readMealAndDataType : Flow<MealAndDataType> = dataStore.data
+    val readMealAndDietType: Flow<MealAndDietType> = dataStore.data
         .catch { exception ->
-            if (exception is IOException){
+            if (exception is IOException) {
                 emit(emptyPreferences())
-            }else {
+            } else {
                 throw exception
             }
         }.map { perferences ->
@@ -74,7 +70,12 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
             val selectedDietType = perferences[PrefrenceKeys.selectedDietType] ?: DEFAULT_DIET_TYPE
             val  selectedDietTypeId = perferences[PrefrenceKeys.selectedDietTypeId] ?: 0
 
-            MealAndDataType(selectedMealType,selectedMealTypeId,selectedDietType,selectedDietTypeId)
+            MealAndDietType(
+                selectedMealType,
+                selectedMealTypeId,
+                selectedDietType,
+                selectedDietTypeId
+            )
         }
 
     //variable for reading the prefrence data type notice the type
@@ -92,8 +93,9 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
 }
 
 //data class for the meal and diet type
-data class MealAndDataType(
-    val selectedMealType : String,
+data class MealAndDietType(
+    val selectedMealType: String,
     val selectedMealTypeId: Int,
-    val selectedDietType :String,
-    val selectedDietTypeId :Int)
+    val selectedDietType: String,
+    val selectedDietTypeId: Int
+)

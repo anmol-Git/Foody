@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.foody.data.Repository
 import com.example.foody.data.database.entities.FavouriteEntity
@@ -14,21 +13,26 @@ import com.example.foody.data.database.entities.RecipeEntity
 import com.example.foody.model.FoodJoke
 import com.example.foody.model.FoodRecipe
 import com.example.foody.util.NetworkResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-
-
-class MainViewModel @ViewModelInject constructor(private val repository: Repository,application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: Repository,
+    application: Application
+) : AndroidViewModel(application) {
 
     /**ROOM DATABASE*/
-    val readRecipe :LiveData<List<RecipeEntity>> =repository.local.readRecipes().asLiveData()
-    val readFavouriteRecipe : LiveData<List<FavouriteEntity>> =repository.local.readFavouriteRecipe().asLiveData()
-    val readFoodJoke : LiveData<List<FoodJokeEntity>> = repository.local.readFoodJoke().asLiveData()
+    val readRecipe: LiveData<List<RecipeEntity>> = repository.local.readRecipes().asLiveData()
+    val readFavouriteRecipe: LiveData<List<FavouriteEntity>> =
+        repository.local.readFavouriteRecipe().asLiveData()
+    val readFoodJoke: LiveData<List<FoodJokeEntity>> = repository.local.readFoodJoke().asLiveData()
 
     //fun to insert recipe in database
-    private fun insertRecipe(recipeEntity: RecipeEntity)=
+    private fun insertRecipe(recipeEntity: RecipeEntity) =
         viewModelScope.launch(Dispatchers.IO) {
             repository.local.insertRecipe(recipeEntity)
         }

@@ -41,20 +41,6 @@ class RecipesRowBinding {
                 error(R.drawable.ic_error_image)
             }
         }
-
-
-        @BindingAdapter("setNumberOfLikes")
-        @JvmStatic
-        fun setNumberOfLike(textView: TextView, likes :Int){
-            textView.text=likes.toString()
-        }
-
-        @BindingAdapter("setNumberOfMinutes")
-        @JvmStatic
-        fun setNumberOfMinutes(textView: TextView, minute :Int){
-            textView.text=minute.toString()
-        }
-
         @BindingAdapter("applyVeganColor")
         @JvmStatic
         fun applyVeganColor(view : View,vegan: Boolean){

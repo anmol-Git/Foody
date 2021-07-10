@@ -25,35 +25,36 @@ class FavouriteRecipeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-           setHasOptionsMenu(true)
-        _binding = FavouriteRecipeFragmentBinding.inflate(inflater,container,false)
-        binding.lifecycleOwner =this
-        binding.mainViewModel =mainViewModel
-        binding.mAdapter= mAdapter
+        setHasOptionsMenu(true)
+        _binding = FavouriteRecipeFragmentBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mainViewModel = mainViewModel
+        binding.mAdapter = mAdapter
 
         setUpRecyclerView(binding.favoriteRecipeRecyclerView)
 
         return binding.root
     }
-    fun setUpRecyclerView(recyclerView: RecyclerView){
-        recyclerView.adapter=mAdapter
-        recyclerView.layoutManager=LinearLayoutManager(requireContext())
+
+    fun setUpRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.adapter = mAdapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding=null
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
         mAdapter.clearContextualActionMode()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fav_recipe_menu,menu)
+        inflater.inflate(R.menu.fav_recipe_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId==R.id.deleteAll){
+        if (item.itemId == R.id.deleteAll) {
             mainViewModel.deleteAllFavoriteRecipe()
            Snackbar.make(binding.root,"All recipes removed", Snackbar.LENGTH_SHORT).setAction("Okay") {}.show()
         }
